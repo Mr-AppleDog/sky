@@ -31,4 +31,11 @@ public interface DishService {
      * @param ids 需要删除的id 列表
      */
     void delete(List<Long> ids);
+
+    /**
+     * 菜品的停售
+     * @param status 状态
+     * @param id 商品id
+     */
+    void stareOrStop(Integer status, Long id);
 }
