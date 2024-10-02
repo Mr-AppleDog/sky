@@ -1,13 +1,17 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
+import com.sky.entity.Dish;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author cxy784853792
+ * @author MrLu
  * @version 1.0
- * @description: TODO 菜品表
- * @date 2024/9/26 17:41
+ * @description: 菜品操作
+ * @date 2024/10/2 18:23
  */
 @Mapper
 public interface DishMapper {
@@ -18,4 +22,11 @@ public interface DishMapper {
      */
     @Select("select count(*) from sky_take_out.dish where category_id=#{id}")
     Integer countByCategoryId(Long id);
+
+    /**
+     * 插入菜品
+     * @param dish 菜品
+     */
+    @AutoFill(value = OperationType.INSERT)
+    void insert(Dish dish);
 }
