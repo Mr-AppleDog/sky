@@ -5,6 +5,7 @@ import com.sky.annotation.AutoFill;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,19 @@ public interface DishMapper {
      * @return 集合
      */
     Page<Dish> pageSearch(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 根据id 查询菜品
+     * @param id 菜品id
+     * @return 菜品
+     */
+    @Select("select * from sky_take_out.dish where id=#{id}")
+    Dish getById(Long id);
+
+    /**
+     * 删除商品
+     * @param id 商品id
+     */
+    @Delete("delete from sky_take_out.dish where id=#{id}")
+    void deleteById(Long id);
 }
