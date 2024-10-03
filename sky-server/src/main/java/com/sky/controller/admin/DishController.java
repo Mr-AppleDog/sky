@@ -5,6 +5,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,20 @@ public class DishController {
     public Result startOrStop(@PathVariable Integer status,Long id){
         dishService.stareOrStop(status,id);
         return Result.success();
+    }
+
+    @PutMapping()
+    @ApiOperation("修改菜品")
+    public Result update(@RequestBody DishDTO dishDTO){
+        dishService.update(dishDTO);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询菜品")
+    public Result<DishVO> getById(@PathVariable  Long id){
+        DishVO dishVO=dishService.getByIdWithFlavor(id);
+        return Result.success(dishVO);
     }
 
 }

@@ -15,6 +15,7 @@ import com.sky.mapper.FlavorMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,5 +126,47 @@ public class DishServiceImpl implements DishService {
         dish.setId(id);
         dish.setStatus(status);
         dishMapper.update(dish);
+    }
+
+    /**
+     * 更新操作
+     * @param dishDTO
+     */
+    @Override
+    public void update(DishDTO dishDTO) {
+        //修改菜品基本信息
+        Dish dish=new Dish();
+        BeanUtils.copyProperties(dishDTO,dish);
+        dishMapper.update(dish);
+        //删除口味信息
+        flavorMapper.deleteByid(dishDTO.getId());
+        //插入口味信息
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if(flavors!=null&&flavors.size()>0){
+            for (DishFlavor df: flavors) {
+                df.setDishId(dish.getId());
+            }
+            flavorMapper.insertBatch(flavors);
+        }
+    }
+
+    /**
+     * 根据id 获取菜品和口味
+     * @param id 菜品编号
+     * @return
+     */
+    @Override
+    public DishVO getByIdWithFlavor(Long id) {
+        //根据id 查询菜品数据
+        Dish dish = dishMapper.getById(id);
+        //根据id 查询口味数据
+        List<DishFlavor> flavors=flavorMapper.getByDishId(id);
+        
+        //封装成vo
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
+        dishVO.setFlavors(flavors);
+
+        return dishVO;
     }
 }
